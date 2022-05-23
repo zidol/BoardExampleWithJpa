@@ -17,7 +17,7 @@ import javax.validation.constraints.NotEmpty;
 public class Member extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "member_id")
     private Long id;
 
@@ -25,6 +25,7 @@ public class Member extends BaseEntity {
     private String nickname;
 
     //계정타입
+    @Enumerated(EnumType.STRING)
     @Column(name = "account_type")
     private AccountType accountType;
 

@@ -1,5 +1,6 @@
 package com.callbus.community.domain;
 
+import com.callbus.community.domain.common.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,10 +14,10 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class heart {
+public class Heart extends BaseEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "heart_id")
     private Long id;
 
