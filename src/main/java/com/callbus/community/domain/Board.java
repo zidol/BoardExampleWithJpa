@@ -29,11 +29,16 @@ public class Board extends BaseEntity {
     @Column(length = 500)
     private String contents;
 
-    @Column
-    private Boolean isUse;
+    @Column(columnDefinition = "boolean default true")
+    private Boolean isUse = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @PrePersist
+    public void prePersist() {
+        this.isUse = this.isUse == null || this.isUse;
+    }
 
 }

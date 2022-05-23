@@ -34,7 +34,13 @@ public class Member extends BaseEntity {
     private String accountId;
 
     //탈퇴 여부
-    private boolean quit;
+    @Column(columnDefinition = "boolean default false")
+    private Boolean quit = false;
+
+    @PrePersist
+    public void prePersist() {
+        this.quit = this.quit != null && this.quit;
+    }
 
 
 }

@@ -22,7 +22,6 @@ class BoardTest {
         Board board = Board.builder()
                 .subject("테스트")
                 .contents("내용")
-                .isUse(true)
                 .build();
 
         Board result = boardRepository.save(board);
