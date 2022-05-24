@@ -22,6 +22,7 @@ public class Member extends BaseEntity {
     private Long id;
 
     //닉네임
+    @Column(unique = true)
     private String nickname;
 
     //계정타입
@@ -30,11 +31,11 @@ public class Member extends BaseEntity {
     private AccountType accountType;
 
     //계정ID
-    @Column(name = "account_id")
+    @Column(name = "account_id", unique = true)
     private String accountId;
 
     //탈퇴 여부
-    @Column(columnDefinition = "boolean default false")
+    @Column(nullable = false, columnDefinition = "TINYINT(1) default 0", length = 1)
     private Boolean quit = false;
 
     @PrePersist

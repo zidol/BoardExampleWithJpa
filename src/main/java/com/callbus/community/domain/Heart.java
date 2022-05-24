@@ -22,11 +22,13 @@ public class Heart extends BaseEntity {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id", nullable = false)
+    @JoinColumn(name = "member_id", nullable = false
+            , foreignKey = @ForeignKey(name = "fk_heart_member_id"))
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "board_id", nullable = false)
+    @JoinColumn(name = "board_id", nullable = false
+            , foreignKey = @ForeignKey(name = "fk_heart_board_id"))
     private Board board;
 
 }

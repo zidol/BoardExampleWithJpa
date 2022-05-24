@@ -22,18 +22,18 @@ public class Board extends BaseEntity {
     private Long id;
 
     //제목
-    @Column(length = 50)
+    @Column(length = 50, nullable = false)
     private String subject;
 
     //내용
-    @Column(length = 500)
+    @Column(length = 500, nullable = false)
     private String contents;
 
-    @Column(columnDefinition = "boolean default true")
+    @Column(nullable = false, columnDefinition = "TINYINT(1) default 1", length = 1)
     private Boolean isUse = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
+    @JoinColumn(name = "member_id", foreignKey =@ForeignKey(name = "fk_board_member_id"))
     private Member member;
 
     @PrePersist
