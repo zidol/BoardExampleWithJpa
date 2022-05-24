@@ -1,6 +1,7 @@
 package com.callbus.community.domain;
 
 import com.callbus.community.domain.common.BaseEntity;
+import com.callbus.community.dto.BoardForm;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -23,13 +24,16 @@ public class Board extends BaseEntity {
 
     //제목
     @Column(length = 50, nullable = false)
+    @Setter
     private String subject;
 
     //내용
     @Column(length = 500, nullable = false)
+    @Setter
     private String contents;
 
     @Column(nullable = false, columnDefinition = "TINYINT(1) default 1", length = 1)
+    @Setter
     private Boolean isUse = true;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -39,6 +43,13 @@ public class Board extends BaseEntity {
     @PrePersist
     public void prePersist() {
         this.isUse = this.isUse == null || this.isUse;
+    }
+
+    //변경 감지 수정
+    public void changeBoard(BoardForm boardForm) {
+        this.setContents(boardForm.getContents());
+        this.setSubject(boardForm.getSubject());
+        this.setIsUse(boardForm.getIsUse());
     }
 
 }
