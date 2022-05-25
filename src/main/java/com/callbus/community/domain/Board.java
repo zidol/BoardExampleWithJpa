@@ -1,11 +1,12 @@
 package com.callbus.community.domain;
 
 import com.callbus.community.domain.common.BaseEntity;
-import com.callbus.community.dto.BoardForm;
+import com.callbus.community.dto.board.BoardForm;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 게시판 Entity
@@ -39,6 +40,9 @@ public class Board extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_id", foreignKey =@ForeignKey(name = "fk_board_member_id"))
     private Member member;
+
+    @OneToMany(mappedBy = "board")
+    private List<Heart> hearts = new ArrayList<>();
 
     @PrePersist
     public void prePersist() {

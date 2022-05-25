@@ -1,6 +1,6 @@
 package com.callbus.community.service.board;
 
-import com.callbus.community.dto.BoardDto;
+import com.callbus.community.dto.board.BoardListDto;
 
 import java.util.List;
 
@@ -9,5 +9,6 @@ import java.util.List;
  */
 public interface BoardService {
 
-    public List<BoardDto> getBoardList();
+    public List<BoardListDto> getBoardList();
+
 }
