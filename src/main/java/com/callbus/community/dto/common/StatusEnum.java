@@ -1,4 +1,4 @@
-료package com.callbus.community.dto.common;
+package com.callbus.community.dto.common;
 
 public enum StatusEnum {
 
