@@ -1,10 +1,10 @@
 package com.callbus.community.repository.board;
 
 import com.callbus.community.domain.QHeart;
-import com.callbus.community.dto.board.BoardDto;
 import com.callbus.community.dto.board.BoardListDto;
 import com.callbus.community.dto.board.BoardSearchForm;
 import com.callbus.community.dto.board.QBoardListDto;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -43,7 +43,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
 //                        heart.id.when(Expressions.nullExpression()).then("N").otherwise("Y")
                 ))
                 .from(board)
-                .leftJoin(board.hearts, heart).on(heart.member.id.eq(memberId))
+                .leftJoin(board.hearts, heart).on(memberId != null ? heart.member.id.eq(memberId) : heart.isNull())
                 .orderBy(board.id.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -52,7 +52,7 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         JPAQuery<Long> countQuery = queryFactory
                 .select(board.count())
                 .from(board)
-                .leftJoin(board.hearts, heart).on(heart.member.id.eq(memberId));
+                .leftJoin(board.hearts, heart).on(memberId != null ? heart.member.id.eq(memberId) : heart.isNull());
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);//() -> countQuery.fetchOne()
     }

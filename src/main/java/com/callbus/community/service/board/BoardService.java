@@ -1,6 +1,10 @@
 package com.callbus.community.service.board;
 
+import com.callbus.community.dto.board.BoardForm;
 import com.callbus.community.dto.board.BoardListDto;
+import com.callbus.community.dto.board.BoardSearchForm;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -9,6 +13,6 @@ import java.util.List;
  */
 public interface BoardService {
 
-    public List<BoardListDto> getBoardList();
+    public Page<BoardListDto> getBoardList(BoardSearchForm boardSearchForm, Pageable pageable, Long memberId);
 
 }
