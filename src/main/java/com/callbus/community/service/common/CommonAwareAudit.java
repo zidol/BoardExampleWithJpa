@@ -25,18 +25,18 @@ public class CommonAwareAudit implements AuditorAware<String> {
                 ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
         String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        Long userId = null;
+        Long memberId = null;
         if (authorization == null) {
             return Optional.of("Anonymous");
         } else if (authorization.startsWith("Realtor ")) {
-            userId = Long.valueOf(authorization.substring("Realtor ".length()));
+            memberId = Long.valueOf(authorization.substring("Realtor ".length()));
         } else if (authorization.startsWith("Lessor ")) {
-            userId = Long.valueOf(authorization.substring("Lessor ".length()));
+            memberId = Long.valueOf(authorization.substring("Lessor ".length()));
         } else {
-            userId = Long.valueOf(authorization.substring("Lessee ".length()));
+            memberId = Long.valueOf(authorization.substring("Lessee ".length()));
         }
         try {
-            Member member = memberRepository.findById(userId).orElse(null);
+            Member member = memberRepository.findById(memberId).orElse(null);
             return Optional.of(member.getAccountId());
         } catch (Exception e) {
             return Optional.of("Anonymous");
