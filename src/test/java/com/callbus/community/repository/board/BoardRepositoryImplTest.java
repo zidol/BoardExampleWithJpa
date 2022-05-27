@@ -107,6 +107,11 @@ class BoardRepositoryImplTest {
                         board.id,
                         board.subject,
                         board.contents,
+                        board.member.accountType
+                                .when(AccountType.LESSEE).then(AccountType.LESSEE.getDesc()).
+                                when(AccountType.LESSOR).then(AccountType.LESSOR.getDesc())
+                                .otherwise(AccountType.REALTOR.getDesc()),
+                        board.member.nickname,
                         JPAExpressions.select(heartSub.count()).from(heartSub).where(heartSub.board.id.eq(board.id)),
                         new CaseBuilder().when(heart.id.isNull()).then("N").otherwise("Y")
 //                        heart.id.when(Expressions.nullExpression()).then("N").otherwise("Y")

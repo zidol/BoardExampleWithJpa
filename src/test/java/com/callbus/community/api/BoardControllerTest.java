@@ -55,7 +55,7 @@ class BoardControllerTest {
         List<BoardListDto> boardList = new ArrayList<>();
 
         for (int i = 1; i < 11; i++) {
-            BoardListDto boardListDto = new BoardListDto((long) i, "subject : " + i, "contents : " + i, 0L, "N");
+            BoardListDto boardListDto = new BoardListDto((long) i, "subject : " + i, "contents : " + i, null, null,0L, "N");
             boardList.add(boardListDto);
         }
         Page<BoardListDto> data = new PageImpl<>(boardList);

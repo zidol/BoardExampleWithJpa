@@ -1,5 +1,6 @@
 package com.callbus.community.repository.board;
 
+import com.callbus.community.domain.AccountType;
 import com.callbus.community.domain.QHeart;
 import com.callbus.community.dto.board.BoardListDto;
 import com.callbus.community.dto.board.BoardSearchForm;
@@ -38,12 +39,18 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                         board.id,
                         board.subject,
                         board.contents,
+                        board.member.accountType
+                                .when(AccountType.LESSEE).then(AccountType.LESSEE.getDesc()).
+                                when(AccountType.LESSOR).then(AccountType.LESSOR.getDesc())
+                                .otherwise(AccountType.REALTOR.getDesc()),
+                        board.member.nickname,
                         JPAExpressions.select(heartSub.count()).from(heartSub).where(heartSub.board.id.eq(board.id)),
                         new CaseBuilder().when(heart.id.isNull()).then("N").otherwise("Y")
 //                        heart.id.when(Expressions.nullExpression()).then("N").otherwise("Y")
                 ))
                 .from(board)
                 .leftJoin(board.hearts, heart).on(memberId != null ? heart.member.id.eq(memberId) : heart.isNull())
+                .where(board.isUse.eq(true))
                 .orderBy(board.id.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -52,7 +59,8 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
         JPAQuery<Long> countQuery = queryFactory
                 .select(board.count())
                 .from(board)
-                .leftJoin(board.hearts, heart).on(memberId != null ? heart.member.id.eq(memberId) : heart.isNull());
+                .leftJoin(board.hearts, heart).on(memberId != null ? heart.member.id.eq(memberId) : heart.isNull())
+                .where(board.isUse.eq(true));
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);//() -> countQuery.fetchOne()
     }
