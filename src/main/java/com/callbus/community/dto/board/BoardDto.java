@@ -1,9 +1,9 @@
 package com.callbus.community.dto.board;
 
 import com.querydsl.core.annotations.QueryProjection;
-import com.sun.istack.NotNull;
 import lombok.*;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 
@@ -20,11 +20,11 @@ public class BoardDto {
 
     private Long id;
 
-    @NotNull
+    @NotEmpty
     @Size(min = 3, max = 50)
     private String subject;
 
-    @NotNull
+    @NotEmpty
     @Size(min = 3, max = 500)
     private String contents;
 

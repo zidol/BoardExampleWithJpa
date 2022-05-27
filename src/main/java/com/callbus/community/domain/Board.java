@@ -1,7 +1,7 @@
 package com.callbus.community.domain;
 
 import com.callbus.community.domain.common.BaseEntity;
-import com.callbus.community.dto.board.BoardForm;
+import com.callbus.community.dto.board.BoardUpdateForm;
 import lombok.*;
 
 import javax.persistence.*;
@@ -50,9 +50,12 @@ public class Board extends BaseEntity {
     }
 
     //변경 감지 수정
-    public void changeBoard(BoardForm boardForm) {
+    public void changeBoard(BoardUpdateForm boardForm) {
         this.setContents(boardForm.getContents());
         this.setSubject(boardForm.getSubject());
+    }
+
+    public void deleteBoard(BoardUpdateForm boardForm) {
         this.setIsUse(boardForm.getIsUse());
     }
 

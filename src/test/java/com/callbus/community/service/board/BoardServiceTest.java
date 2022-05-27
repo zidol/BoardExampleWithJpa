@@ -2,7 +2,7 @@ package com.callbus.community.service.board;
 
 import com.callbus.community.domain.Board;
 import com.callbus.community.domain.Member;
-import com.callbus.community.dto.board.BoardForm;
+import com.callbus.community.dto.board.BoardUpdateForm;
 import com.callbus.community.repository.board.BoardRepository;
 import com.callbus.community.repository.member.MemberRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -81,7 +81,7 @@ class BoardServiceTest {
         Board board = createBoard();
 
         //when
-        BoardForm boardForm = new BoardForm("제목 수정", "내용 수정", true);
+        BoardUpdateForm boardForm = new BoardUpdateForm("제목 수정", "내용 수정", true);
 
         boardRepository.findById(board.getId()).ifPresent(
                 findboard -> {
@@ -107,12 +107,12 @@ class BoardServiceTest {
         Board board = createBoard();
 
         //when
-        BoardForm boardForm = new BoardForm();
+        BoardUpdateForm boardForm = new BoardUpdateForm();
         boardForm.setIsUse(false);
 
         boardRepository.findById(board.getId()).ifPresent(
                 findboard -> {
-                    findboard.changeBoard(boardForm);
+                    findboard.deleteBoard(boardForm);
                 }
         );
 
