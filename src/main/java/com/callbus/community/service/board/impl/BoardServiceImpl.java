@@ -49,6 +49,10 @@ public class BoardServiceImpl implements BoardService {
             throw new NotAllowedUserException("작성자만 수정가능합니다");
         }
 
+        if (!board.getIsUse()) {
+            throw new Exception("삭제 된 게시글은 수정 불가능합니다");
+        }
+
         board.changeBoard(boardForm);
         return board;
     }

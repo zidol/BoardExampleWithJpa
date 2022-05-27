@@ -69,10 +69,14 @@ public class BoardController {
     }
 
     @DeleteMapping("/boards/{id}")
-    public ResponseEntity<Object> deleteBoard(@PathVariable("id") Long id,
-                                              @RequestBody @Valid BoardUpdateForm boardForm) throws Exception {
+    public ResponseEntity<Object> deleteBoard(@PathVariable("id") Long id, HttpServletRequest request) throws Exception {
+        MemberInfo memberInfo = (MemberInfo) request.getAttribute("memberInfo");
 
+        BoardUpdateForm boardForm = new BoardUpdateForm();
+        boardForm.setMemberId(memberInfo.getId());
         boardForm.setId(id);
+        boardForm.setIsUse(false);
+
         boardService.deleteBoard(boardForm);
 
         return setObjectResponseEntity(null, "정상적으로 삭제 하였습니다.");
