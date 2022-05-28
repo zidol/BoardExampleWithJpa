@@ -1,5 +1,7 @@
 package com.callbus.community.repository.heart;
 
+import com.callbus.community.Exception.customException.DuplicateHeartException;
+import com.callbus.community.Exception.customException.NotFoundException;
 import com.callbus.community.domain.AccountType;
 import com.callbus.community.domain.Board;
 import com.callbus.community.domain.Heart;
@@ -13,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +33,9 @@ class HeartRepositoryTest {
     @Autowired
     BoardRepository boardRepository;
 
-    private Member createMember() {
+    private Map<String, Object> createMember() {
+        Map<String, Object> map = new HashMap<>();
+        List<Board> boards = new ArrayList<>();
         Member newMember =
                 Member.builder()
                         .nickname("Kane")
@@ -49,10 +53,13 @@ class HeartRepositoryTest {
                     .member(savedMember)
                     .build();
 
-            boardRepository.save(board);
+            Board save = boardRepository.save(board);
+            boards.add(save);
         }
+        map.put("member", savedMember);
+        map.put("boards", boards);
 
-        return savedMember;
+        return map;
     }
 
     @Test
@@ -60,9 +67,12 @@ class HeartRepositoryTest {
     @Transactional
     void insertHeart() throws Exception {
         //given
-        Member member = createMember();
+        Map<String, Object> returnMap = createMember();
+        Member member = (Member) returnMap.get("member");
 
-        Board board = boardRepository.findById(1L).orElseThrow(() -> new Exception("조회 하신 결과가 없습니다."));
+        List<Board> boards = (List<Board>) returnMap.get("boards");
+
+        Board board = boardRepository.findById(boards.get(0).getId()).orElseThrow(() -> new Exception("조회 하신 결과가 없습니다."));
 
         //when
         Heart hear = Heart.builder()
@@ -83,9 +93,11 @@ class HeartRepositoryTest {
     @Transactional
     void invalidHeart() throws Exception {
         //given
-        Member member = createMember();
+        Map<String, Object> returnMap = createMember();
+        Member member = (Member) returnMap.get("member");
+        List<Board> boards = (List<Board>) returnMap.get("boards");
 
-        Board board = boardRepository.findById(1L).orElseThrow(() -> new Exception("조회 하신 결과가 없습니다."));
+        Board board = boardRepository.findById(boards.get(0).getId()).orElseThrow(() -> new NotFoundException("조회 하신 결과가 없습니다."));
 
         //when
         Heart hear = Heart.builder()
@@ -95,18 +107,19 @@ class HeartRepositoryTest {
 
         Heart save = heartRepository.save(hear);
 
+        //해당 게시글에 좋아요 있는지 확인
         Heart findHeart = heartRepository.findByMemberIdAndBoardId(member.getId(), board.getId()).orElse(null);
 
-        //then
+        //then :
         assertThrows(RuntimeException.class, () -> {
             throwException(findHeart);
         });
 
     }
 
-    private void throwException(Heart findHeart) throws Exception {
+    private void throwException(Heart findHeart) throws DuplicateHeartException {
         if(findHeart != null) {
-            throw new RuntimeException("좋아요를 이미 하셨습니다.");
+            throw new DuplicateHeartException("좋아요를 이미 하셨습니다.");
         }
     }
 
