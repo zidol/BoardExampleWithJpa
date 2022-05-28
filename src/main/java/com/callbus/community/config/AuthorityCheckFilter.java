@@ -1,10 +1,14 @@
 package com.callbus.community.config;
 
+import com.callbus.community.Exception.customException.NotFoundException;
 import com.callbus.community.domain.AccountType;
+import com.callbus.community.domain.Member;
 import com.callbus.community.dto.common.MemberInfo;
+import com.callbus.community.repository.member.MemberRepository;
 import com.callbus.community.util.ErrorResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -19,11 +23,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Optional;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public class AuthorityCheckFilter extends OncePerRequestFilter {
 
     @SneakyThrows
@@ -34,7 +38,6 @@ public class AuthorityCheckFilter extends OncePerRequestFilter {
         String authorization = request.getHeader(HttpHeaders.AUTHORIZATION);
         String method = request.getMethod();
         boolean isAuthenticated = false;
-        log.info("filter start");
 
         MemberInfo memberInfo = null;
 
@@ -44,7 +47,6 @@ public class AuthorityCheckFilter extends OncePerRequestFilter {
                 log.info("인증 받지 못한 사용자입니다.");
                 setErrorResponse(HttpStatus.UNAUTHORIZED, "UNAUTHORIZED ERROR", request, response);
             } else {
-                log.info("멤버 정보");
                 memberInfo = getMemberInfo(authorization);
                 request.setAttribute("memberInfo", memberInfo);
                 chain.doFilter(request, response);
@@ -64,15 +66,15 @@ public class AuthorityCheckFilter extends OncePerRequestFilter {
         //컨트롤러에서 사용하기 위해 멤버 id와 계정 타입 닮기
         if (authorization.startsWith("Realtor ")) {
             memberId = Long.valueOf(authorization.substring("Realtor ".length()));
-            memberInfo.setId(memberId);
+            memberInfo.setMemberId(memberId);
             memberInfo.setAccountType(AccountType.REALTOR);
         } else if (authorization.startsWith("Lessor ")) {
             memberId = Long.valueOf(authorization.substring("Lessor ".length()));
-            memberInfo.setId(memberId);
+            memberInfo.setMemberId(memberId);
             memberInfo.setAccountType(AccountType.LESSOR);
         } else {
             memberId = Long.valueOf(authorization.substring("Lessee ".length()));
-            memberInfo.setId(memberId);
+            memberInfo.setMemberId(memberId);
             memberInfo.setAccountType(AccountType.LESSEE);
         }
         return memberInfo;

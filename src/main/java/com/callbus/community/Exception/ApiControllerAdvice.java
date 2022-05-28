@@ -26,7 +26,9 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-
+/**
+ * 컨트롤러 에러 처리
+ */
 @RestControllerAdvice//(basePackageClasses = ApiController.class)//특정 클래스에서만 적용 할때
 public class ApiControllerAdvice {
 	
@@ -173,7 +175,7 @@ public class ApiControllerAdvice {
     }
     
     @ExceptionHandler(value = NotFoundException.class)
-    public ResponseEntity tokenExpiredException(NotFoundException e
+    public ResponseEntity notFoundException(NotFoundException e
     		, HttpServletRequest request) {
   
     	logger.info("요청하신 url은 없는 url입니다.");

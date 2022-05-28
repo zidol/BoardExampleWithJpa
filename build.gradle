@@ -33,7 +33,13 @@ dependencies {
 	//querydsl 추가
 //	implementation 'com.querydsl:querydsl-jpa'
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
+	implementation 'org.projectlombok:lombok:1.18.22'
 	annotationProcessor "com.querydsl:querydsl-apt:${queryDslVersion}"
+
+	//swagger 추가
+	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '3.0.0'
+
 
 
 

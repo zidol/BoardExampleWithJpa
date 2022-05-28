@@ -33,7 +33,7 @@ class CommunityApplicationTests {
 
 		QMember qMember = new QMember("m");
 
-		Member result = query.selectFrom(qMember).fetchOne();
+		Member result = query.selectFrom(qMember).where(qMember.id.eq(member.getId())).fetchOne();
 
 		assertThat(result).isEqualTo(member);
 		assertThat(result.getId()).isEqualTo(member.getId());
