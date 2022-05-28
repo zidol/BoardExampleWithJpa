@@ -1,6 +1,7 @@
 package com.callbus.community.service.board.impl;
 
 import com.callbus.community.Exception.customException.NotAllowedUserException;
+import com.callbus.community.Exception.customException.NotFoundException;
 import com.callbus.community.domain.Board;
 import com.callbus.community.domain.Member;
 import com.callbus.community.dto.board.BoardDto;
@@ -16,7 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +46,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public Board updateBoard(BoardUpdateForm boardForm) throws Exception {
-        Board board = boardRepository.findById(boardForm.getId()).orElseThrow(() -> new Exception("찾으신 게시글이 존재하지 않습니다."));
+        Board board = boardRepository.findById(boardForm.getId()).orElseThrow(() -> new NotFoundException("찾으신 게시글이 존재하지 않습니다."));
 
         if (!boardForm.getMemberId().equals(board.getMember().getId())) {
             throw new NotAllowedUserException("작성자만 수정가능합니다");
@@ -62,7 +63,7 @@ public class BoardServiceImpl implements BoardService {
     @Override
     @Transactional
     public Board deleteBoard(BoardUpdateForm boardForm) throws Exception {
-        Board board = boardRepository.findById(boardForm.getId()).orElseThrow(() -> new Exception("찾으신 게시글이 존재하지 않습니다."));
+        Board board = boardRepository.findById(boardForm.getId()).orElseThrow(() -> new NotFoundException("찾으신 게시글이 존재하지 않습니다."));
 
         if (!boardForm.getMemberId().equals(board.getMember().getId())) {
             throw new NotAllowedUserException("작성자만 삭제가능합니다");

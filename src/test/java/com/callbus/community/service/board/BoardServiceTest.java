@@ -1,5 +1,6 @@
 package com.callbus.community.service.board;
 
+import com.callbus.community.Exception.customException.NotFoundException;
 import com.callbus.community.domain.Board;
 import com.callbus.community.domain.Member;
 import com.callbus.community.dto.board.BoardUpdateForm;
@@ -28,7 +29,7 @@ class BoardServiceTest {
     @DisplayName("게시판 작성 테스트")
     void saveBoard() {
         //given
-        Member findMember = memberRepository.findById(1L).get();
+        Member findMember = memberRepository.findById(1L).orElse(null);
 
         for (int i = 0; i < 12; i++) {
             //when
@@ -46,7 +47,7 @@ class BoardServiceTest {
     }
 
     public Board createBoard() {
-        Member findMember = memberRepository.findById(1L).get();
+        Member findMember = memberRepository.findById(1L).orElseThrow(() -> new NotFoundException("없음"));
 
         Board board = Board.builder()
                 .subject("제목 테스트")
