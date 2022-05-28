@@ -141,6 +141,6 @@ class BoardRepositoryImplTest {
 
         assertThat(boardListDto.getILike()).isEqualTo("Y");//member1이 조회 할때 좋아요 했는지 안했는지 확인
         assertThat(boardListDto.getLikeCnt()).isEqualTo(2);//좋아요 2개인지 확인
-        assertThat(count).isEqualTo(11L);// 총 게시판 갯수 12개인지(페이징)
+        assertThat(count).isEqualTo(12L);// 총 게시판 갯수 12개인지(페이징)
     }
 }

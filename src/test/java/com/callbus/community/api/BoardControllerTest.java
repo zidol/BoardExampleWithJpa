@@ -1,15 +1,23 @@
 package com.callbus.community.api;
 
+import com.callbus.community.config.AuthorityCheckFilter;
+import com.callbus.community.config.JpaAuditingConfiguration;
+import com.callbus.community.domain.AccountType;
+import com.callbus.community.domain.Member;
 import com.callbus.community.dto.board.BoardListDto;
 import com.callbus.community.dto.board.BoardSearchForm;
 import com.callbus.community.repository.board.BoardRepository;
 import com.callbus.community.repository.member.MemberRepository;
 import com.callbus.community.service.board.BoardService;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
@@ -18,12 +26,12 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -45,6 +53,22 @@ class BoardControllerTest {
     @MockBean
     BoardRepository boardRepository;
 
+    @MockBean
+    JpaAuditingConfiguration jpaAuditingConfiguration;
+
+    @BeforeEach
+    @Transactional
+    void before() {
+        System.out.println("@@@@@@");
+        Member member = Member.builder()
+                .nickname("kane")
+                .accountType(AccountType.REALTOR)
+                .accountId("user1")
+                .build();
+        memberRepository.save(member);
+    }
+
+
     @Test
     @DisplayName("게시판 목록 api 올바르게 요청을 받아 데이터를 리턴한다.")
     void getBoardList() throws Exception {
@@ -59,8 +83,6 @@ class BoardControllerTest {
             boardList.add(boardListDto);
         }
         Page<BoardListDto> data = new PageImpl<>(boardList);
-
-        System.out.println("data = " + data.getContent());
 
 //        when(this.boardService.getBoardList(boardSearchForm, pageable, 1L)).thenReturn(data);
         doReturn(data).when(boardService).getBoardList(boardSearchForm, pageable, 1L);
@@ -83,9 +105,10 @@ class BoardControllerTest {
     @Test
     @DisplayName("올바르지 않은(유효성체크) 데이터의 게시판 등록")
     void insertWithInValidData() throws Exception {
+
         mockMvc.perform(post("/api/v1/boards")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("AUTHORIZATION", "Lessor 2")
+                        .header("AUTHORIZATION", "Realtor 1")
                         .content("{\n" +
                                 "    \"subject\" : \"제목 테스트\",\n" +
                                 "    \"contents\" : \"\"\n" +
@@ -97,7 +120,7 @@ class BoardControllerTest {
     void insertWithValidData() throws Exception {
         mockMvc.perform(post("/api/v1/boards")
                 .contentType(MediaType.APPLICATION_JSON)
-                        .header("AUTHORIZATION", "Lessor 2")
+                        .header("AUTHORIZATION", "Realtor 1")
                         .content("{\n" +
                                 "    \"subject\" : \"제목 테스트\",\n" +
                                 "    \"contents\" : \"내용 테스트\"\n" +
@@ -110,7 +133,7 @@ class BoardControllerTest {
     void updateWithInValidData() throws Exception {
         mockMvc.perform(put("/api/v1/boards/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("AUTHORIZATION", "Lessor 2")
+                        .header("AUTHORIZATION", "Realtor 1")
                         .content("{\n" +
                                 "    \"id\": 1,\n" +
                                 "    \"memberId\" : 2,\n" +
@@ -125,7 +148,7 @@ class BoardControllerTest {
     void updateWithValidData() throws Exception {
         mockMvc.perform(put("/api/v1/boards/1")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .header("AUTHORIZATION", "Lessor 2")
+                        .header("AUTHORIZATION", "Realtor 1")
                         .content("{\n" +
                                 "    \"id\": 1,\n" +
                                 "    \"memberId\" : 2,\n" +

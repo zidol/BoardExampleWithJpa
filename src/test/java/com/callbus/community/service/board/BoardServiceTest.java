@@ -60,6 +60,7 @@ class BoardServiceTest {
 
     @Test
     @DisplayName("게시판 조회 ")
+    @Transactional
     void readBoard() {
         //given
         Board board = createBoard();

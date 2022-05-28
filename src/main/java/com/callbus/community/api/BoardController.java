@@ -66,7 +66,6 @@ public class BoardController {
     public ResponseEntity<Object> insertBoard(@RequestBody @Valid BoardDto boardDto, HttpServletRequest request) throws Exception {
         MemberInfo memberInfo = (MemberInfo) request.getAttribute("memberInfo");
 
-        System.out.println("memberInfo.getId() = " + memberInfo.getMemberId());
         boardDto.setMemberId(memberInfo.getMemberId());
 
         Board insertBoard = boardService.insertBoard(boardDto);
