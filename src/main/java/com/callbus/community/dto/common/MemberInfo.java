@@ -10,6 +10,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class MemberInfo {
-    private Long id;
+    private Long memberId;
     private AccountType accountType;
+    private String accountId;
 }
