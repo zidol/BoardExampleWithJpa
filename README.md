@@ -65,9 +65,10 @@ spring:
 - Test 코드를 먼저 구현하고 비즈니스 로직을 구현 하였습니다.
 - Authorization을 통해 회원 인증하는 로직은 Spring security를 구현하지 않고 `OncePerRequestFilter`를 상속받아 간단히 구현하였습니다.
 - 각 글은 작성시간, 마지막 수정시간, 삭제시간의 대한 히스토리는 실제 테이블의 데이터를 삭제 하지 않고 IS_USE라는 컬럼을 추가하여 true, false(DB 상에선 1, 0)으로 구분하여 구현 하였으며 spring data jpa가 지원하는 `AwareAudit`기능을 사용하여 구현 하였습니다.
+### ERD 
+ ![ERD](https://zidols.notion.site/image/https%3A%2F%2Fs3-us-west-2.amazonaws.com%2Fsecure.notion-static.com%2F2454375a-6465-44b0-a477-1166a2870fc0%2FUntitled.png?table=block&id=acf9e718-baff-45bd-9cab-0eb3b3f72968&spaceId=370dbc5e-872d-4d9e-9f3a-f7113cda9427&width=2000&userId=&cache=v2)
 
 ---
-
 # 3. 추가한 라이브러리
 
 1. `querydsl` 아래와 같은 장점이 있어 사용하였습니다.
