@@ -29,7 +29,7 @@ public class HeartServiceImpl implements HeartService {
     private final BoardRepository boardRepository;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void insertHeart(Long memberId, Long boardId) throws DuplicateHeartException {
 
         Member member = memberRepository.findById(memberId).orElseThrow(() -> new NotFoundException("조회 하신 결과가 없습니다."));

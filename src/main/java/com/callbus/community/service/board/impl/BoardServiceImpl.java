@@ -33,6 +33,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Board insertBoard(BoardDto boardDto) throws Exception {
         Member member = memberRepository.findById(boardDto.getMemberId()).orElseThrow(() -> new Exception("존재하지 않는 회원입니다"));
         Board newBoard = Board.builder()
@@ -44,7 +45,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Board updateBoard(BoardUpdateForm boardForm) throws Exception {
         Board board = boardRepository.findById(boardForm.getId()).orElseThrow(() -> new NotFoundException("찾으신 게시글이 존재하지 않습니다."));
 
@@ -61,7 +62,7 @@ public class BoardServiceImpl implements BoardService {
     }
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public Board deleteBoard(BoardUpdateForm boardForm) throws Exception {
         Board board = boardRepository.findById(boardForm.getId()).orElseThrow(() -> new NotFoundException("찾으신 게시글이 존재하지 않습니다."));
 
