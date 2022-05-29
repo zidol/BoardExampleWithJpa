@@ -13,6 +13,7 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import java.util.List;
@@ -50,7 +51,11 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 ))
                 .from(board)
                 .leftJoin(board.hearts, heart).on(memberId != null ? heart.member.id.eq(memberId) : heart.isNull())
-                .where(board.isUse.eq(true))
+                .where(
+                        board.isUse.eq(true),
+                        titleEq(boardSearchForm.getSubject()),
+                        contentEq(boardSearchForm.getContents())
+                )
                 .orderBy(board.id.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -60,8 +65,22 @@ public class BoardRepositoryImpl implements BoardRepositoryCustom {
                 .select(board.count())
                 .from(board)
                 .leftJoin(board.hearts, heart).on(memberId != null ? heart.member.id.eq(memberId) : heart.isNull())
-                .where(board.isUse.eq(true));
+                .where(
+                        board.isUse.eq(true),
+                        titleEq(boardSearchForm.getSubject()),
+                        contentEq(boardSearchForm.getContents())
+
+                );
 
         return PageableExecutionUtils.getPage(content, pageable, countQuery::fetchOne);//() -> countQuery.fetchOne()
+    }
+    //제목 검색
+    private BooleanExpression titleEq(String subject) {
+        return StringUtils.hasText(subject) ? board.subject.contains(subject) : null;
+    }
+
+    //내용 검색
+    private BooleanExpression contentEq(String content) {
+        return StringUtils.hasText(content) ? board.contents.contains(content) : null;
     }
 }

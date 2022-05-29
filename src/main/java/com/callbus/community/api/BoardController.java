@@ -8,6 +8,8 @@ import com.callbus.community.dto.board.BoardUpdateForm;
 import com.callbus.community.dto.common.MemberInfo;
 import com.callbus.community.service.board.BoardService;
 import com.callbus.community.util.common.CommonUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -22,6 +24,8 @@ import javax.validation.Valid;
 /**
  * 게시판 관련 컨트롤러
  */
+
+@Api(tags = {"게시판 API"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -40,6 +44,7 @@ public class BoardController {
      * @return
      * @throws Exception
      */
+    @ApiOperation(value = "게시판 목록 조회", notes = "게시글의 목록을 조회합니다. 작성자의 계정 타입과 좋아요 갯수, 자신의 좋아요 여부를 알수있습니다.")
     @GetMapping("/boards")
     public ResponseEntity<Object> getBoards(BoardSearchForm boardSearchForm
             , Pageable pageable, HttpServletRequest request) throws Exception {
@@ -62,6 +67,7 @@ public class BoardController {
      * @return
      * @throws Exception
      */
+    @ApiOperation(value = "게시판 게시글 등록", notes = "HTTP Header에 Authorization 값이 있는 회원만 등록 가능합니다. ex) Realtor 1")
     @PostMapping("/boards")
     public ResponseEntity<Object> insertBoard(@RequestBody @Valid BoardDto boardDto, HttpServletRequest request) throws Exception {
         MemberInfo memberInfo = (MemberInfo) request.getAttribute("memberInfo");
@@ -81,6 +87,7 @@ public class BoardController {
      * @return
      * @throws Exception
      */
+    @ApiOperation(value = "게시판 게시글 수겅", notes = "HTTP Header에 Authorization 값이 있는 회원만 수정 가능하며 본인 글만 수정가능합니다. ex) Realtor 1")
     @PutMapping("/boards/{id}")
     public ResponseEntity<Object> updateBoard(@PathVariable("id") Long id,
                                               @RequestBody @Valid BoardUpdateForm boardForm, HttpServletRequest request) throws Exception {
@@ -101,6 +108,7 @@ public class BoardController {
      * @return
      * @throws Exception
      */
+    @ApiOperation(value = "게시판 게시글 삭제", notes = "HTTP Header에 Authorization 값이 있는 회원만 수정 가능하며 본인 글만 삭제가능합니다. ex) Realtor 1")
     @DeleteMapping("/boards/{id}")
     public ResponseEntity<Object> deleteBoard(@PathVariable("id") Long id, HttpServletRequest request) throws Exception {
         MemberInfo memberInfo = (MemberInfo) request.getAttribute("memberInfo");

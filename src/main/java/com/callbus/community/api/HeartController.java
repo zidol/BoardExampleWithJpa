@@ -4,6 +4,8 @@ import com.callbus.community.dto.common.MemberInfo;
 import com.callbus.community.dto.heart.HeartDto;
 import com.callbus.community.service.heart.HeartService;
 import com.callbus.community.util.common.CommonUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,7 @@ import javax.validation.Valid;
 /**
  * 좋아요 관련 컨트롤러
  */
+@Api(tags = {"게시판 좋아요 API"})
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1")
@@ -35,6 +38,7 @@ public class HeartController {
      * @return
      */
     @PostMapping("/hearts")
+    @ApiOperation(value = "게시글 좋아요", notes = "HTTP Header에 Authorization 값이 있는 회원만 가능하며 글에 좋아요는 한 계정이 한 글에 한 번만 할 수 있습니다. ex) Realtor 1")
     public ResponseEntity<?> insertHeart(@RequestBody @Valid HeartDto heartDto, HttpServletRequest request) {
         MemberInfo memberInfo = (MemberInfo) request.getAttribute("memberInfo");
 

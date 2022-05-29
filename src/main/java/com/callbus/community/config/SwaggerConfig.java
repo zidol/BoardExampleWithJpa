@@ -112,12 +112,12 @@ public class SwaggerConfig {
     @ApiModel
     static class BoardDtoSwagger {
 
-        @ApiModelProperty
+        @ApiModelProperty(value = "입력 제목")
         @NotEmpty
         @Size(min = 3, max = 50)
         private String subject;
 
-        @ApiModelProperty(value = "페이지 크기", allowableValues = "range[0, 100]")
+        @ApiModelProperty(value = "입력 내용")
         @NotEmpty
         @Size(min = 3, max = 500)
         private String contents;
