@@ -21,3 +21,5 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
 #    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+server:
+  port: 8080
