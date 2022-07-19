@@ -88,11 +88,11 @@ public class SwaggerConfig {
 
     private ApiInfo apiInfo() {
         return new ApiInfo(
-                "Callbus 게시판 Rest Api",
+                "게시판 Rest Api",
                 "Some custom description of API.",
                 "1.0",
                 "Terms of service",
-                new Contact("Callbus Community Rest Api", "https://callbus.com/", "ajh3166@gmail.com"),
+                new Contact("Community Rest Api", "https://zidol.github.io/", "ajh3166@gmail.com"),
                 "License of API",
                 "API license URL",
                 Collections.emptyList());
