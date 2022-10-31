@@ -28,6 +28,7 @@ public class BoardServiceImpl implements BoardService {
     private final MemberRepository memberRepository;
 
     @Override
+    @Transactional(readOnly = true)
     public Page<BoardListDto> getBoardList(BoardSearchForm boardSearchForm, Pageable pageable, Long memberId) throws Exception{
         return boardRepository.getBoardList(boardSearchForm, pageable, memberId);
     }
